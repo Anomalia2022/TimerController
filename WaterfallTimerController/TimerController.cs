@@ -5,25 +5,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Waterfall;
+using Waterfall.EffectControllers;
+using Waterfall.UI.EffectControllersUI;
 
-namespace WaterfallTimerController
+namespace Waterfall
 {
     [Serializable]
     [DisplayName("Timer")]
     public class TimerController : WaterfallController
     {
-        [Persistent] float time;
+        [Persistent] public float time;
         private float currentTime;
 
         public TimerController() : base() { }
         public TimerController(ConfigNode node) : base(node) { }
 
+        public override ConfigNode Save()
+        {
+            var c = base.Save();
+            return c;
+        }
+
         public override void Initialize(ModuleWaterfallFX host)
         {
             base.Initialize(host);
-            currentTime = time;
             values = new float[1];
+            currentTime = time;
         }
 
         protected override void UpdateInternal()
@@ -31,7 +38,8 @@ namespace WaterfallTimerController
             if (currentTime > 0)
             {
                 currentTime -= Time.deltaTime;
-            } else
+            }
+            else
             {
                 return; // Time has reached 0, no need to keep setting effect to 0
             }
@@ -41,4 +49,5 @@ namespace WaterfallTimerController
         }
 
     }
+
 }
